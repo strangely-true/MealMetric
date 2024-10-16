@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+
+<div class="container mt-4">
+  <h1>Welcome, <%= username %>!</h1>
+  <h2>Your Recipes</h2>
+  <button class="btn btn-primary" onclick="location.href='/new_recipe'">Add New Recipe</button>
+  
+  <div id="recipe-list" class="mt-4">
+    <% if (recipes.length > 0) { %>
+      <% recipes.forEach(recipe => { %>
+        <div class="recipe">
+          <h3><%= recipe.name %></h3>
+          <button class="btn btn-info" onclick="location.href='/recipes/<%= recipe.id %>'">View Recipe</button>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>No recipes found. Add a new recipe to get started!</p>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

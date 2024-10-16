@@ -1,0 +1,52 @@
+<%- include('partials/header') %>
+
+<div class="container mt-4">
+  <h1><%= recipe.name %></h1>
+  
+  <h2>Ingredients</h2>
+  <ul>
+    <% ingredients.forEach(ingredient => { %>
+      <li><%= ingredient.name %> - <%= ingredient.quantity %> <%= ingredient.unit %></li>
+    <% }) %>
+  </ul>
+  
+  <h2>Nutritional Information</h2>
+  <ul>
+    <li>Calories: <%= recipe.total_calories *10 %>cal</li>
+    <li>Protein: <%= recipe.total_protein *10 %>g</li>
+    <li>Carbohydrates: <%= recipe.total_carbs *10 %>g</li>
+    <li>Fat: <%= recipe.total_fat *10 %>g</li>
+  </ul>
+
+  <div class="mt-4">
+    <button class="btn btn-warning" onclick="location.href='/recipes/<%= recipe.id %>/edit'">Edit Recipe</button>
+    <button class="btn btn-danger" id="delete-recipe">Delete Recipe</button>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script>
+  document.getElementById('delete-recipe').addEventListener('click', function() {
+    if (confirm('Are you sure you want to delete this recipe?')) {
+      fetch(`/recipes/<%= recipe.id %>`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Recipe deleted successfully!');
+          window.location.href = '/index';
+        } else {
+          alert('Error deleting recipe');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error deleting recipe');
+      });
+    }
+  });
+</script>

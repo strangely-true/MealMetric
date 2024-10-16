@@ -1,0 +1,19 @@
+.ingredient-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#recipeDetails {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+#nutritionTable {
+  width: 100%;
+}
+body {
+  padding-bottom: 90px;
+}

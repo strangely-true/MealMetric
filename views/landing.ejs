@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MealMetric - Smart Nutrition Tracker for Healthy Recipes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#4CAF50',
+                        'primary-dark': '#45a049',
+                        'secondary': '#8BC34A',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+
+        #navbar.bg-white a {
+            text-shadow: none;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gradient-to-br from-green-50 to-green-100">
+    <nav class="shadow-md fixed w-full z-10 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="#" class="text-2xl font-bold text-green-500">
+                    <i class="fas fa-leaf mr-2"></i>MealMetric.
+                </a>
+                <ul class="flex space-x-6">
+                    <li><a href="/login" class="text hover:text-green-400 font-semibold transition duration-300">Login</a></li>
+                    <li><a href="/signup" class="bg-green-500 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-105">Sign Up</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-cover bg-center h-screen flex items-center relative overflow-hidden" style="background-image: url('https://images.unsplash.com/photo-1490818387583-1baba5e638af?auto=format&fit=crop&w=1920&q=80');">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white" data-aos="fade-up">Track Your Nutrition, Elevate Your Health</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-gray-200" data-aos="fade-up" data-aos-delay="200">The smart nutrition tracker that helps you create, and optimize your recipes for a healthier lifestyle.</p>
+            <a href="/signup" class="bg-green-600 hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-full text-lg transition duration-300 inline-flex items-center transform hover:scale-105" data-aos="fade-up" data-aos-delay="400">
+                Get Started
+                <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </header>
+
+    <section id="features" class="py-20 bg-green-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800" data-aos="fade-up">Discover Our Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition duration-300 transform hover:scale-105" data-aos="fade-up">
+                    <i class="fas fa-book-open text-5xl text-green-500 mb-4"></i>
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Recipe Creation</h3>
+                    <p class="text-gray-600">Easily create and store your favorite recipes with detailed nutritional information.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition duration-300 transform hover:scale-105" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fas fa-chart-bar text-5xl text-green-500 mb-4"></i>
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Nutrition Analysis</h3>
+                    <p class="text-gray-600">Get instant, accurate nutritional breakdowns for all your meals and recipes.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition duration-300 transform hover:scale-105" data-aos="fade-up" data-aos-delay="400">
+                    <i class="fas fa-heartbeat text-5xl text-green-500 mb-4"></i>
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Health Optimization</h3>
+                    <p class="text-gray-600">Monitor your health with ease</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-green-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800" data-aos="fade-up">How It Works</h2>
+            <div class="flex flex-wrap items-center">
+                <div class="w-full md:w-1/2 mb-8 md:mb-0" data-aos="fade-right">
+                    <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=1350&q=80" alt="Healthy meal" class="rounded-lg shadow-xl">
+                </div>
+                <div class="w-full md:w-1/2 md:pl-12" data-aos="fade-left">
+                    <ol class="list-decimal space-y-4 text-gray-700">
+                        <li class="text-lg"><span class="font-semibold">Input your recipes:</span> Add ingredients and quantities.</li>
+                        <li class="text-lg"><span class="font-semibold">Get nutritional data:</span> Our API analyzes your recipes instantly.</li>
+                        <li class="text-lg"><span class="font-semibold">Optimize your meals:</span> Edit or change ingredients.</li>
+                        <li class="text-lg"><span class="font-semibold">Track your progress:</span> Monitor your nutritional intake over time.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-orange-400 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8" data-aos="fade-up">Ready to start your health journey?</h2>
+            <a href="/signup" class="bg-white text-green-500 hover:bg-gray-100 font-bold py-3 px-8 rounded-full text-lg transition duration-300 inline-flex items-center transform hover:scale-105" data-aos="fade-up" data-aos-delay="200">
+                Join MealMetric Today
+                <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full md:w-1/2 mb-8 md:mb-0">
+                    <h3 class="text-2xl font-bold mb-4">MealMetric</h3>
+                    <p class="text-gray-400">Empowering you to make healthier choices, one meal at a time.</p>
+                </div>
+                <div class="w-full md:w-1/2 mb-8 md:mb-0">
+                    <h4 class="text-xl font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Home</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition duration-300">Features</a></li>
+                        <li><a href="/login" class="text-gray-400 hover:text-white transition duration-300">Login</a></li>
+                        <li><a href="/signup" class="text-gray-400 hover:text-white transition duration-300">Sign Up</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p>&copy; 2024 MealMetric. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+        });
+
+        window.addEventListener('scroll', function() {
+            var navbar = document.getElementById('navbar');
+            if (window.scrollY > 200) {  
+                navbar.classList.add('bg-white');
+            } else {
+                navbar.classList.remove('bg-white');
+            }
+        });
+    </script>
+</body>
+</html>

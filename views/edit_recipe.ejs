@@ -1,0 +1,114 @@
+<%- include('partials/header') %>
+
+<div class="container mt-4">
+  <h1>Edit Recipe</h1>
+
+  <form id="edit-recipe-form">
+    <div class="form-group">
+      <label for="recipeName">Recipe Name</label>
+      <input type="text" class="form-control" id="recipeName" value="<%= recipe.name %>" required>
+    </div>
+
+    <h2>Ingredients</h2>
+    <div id="ingredientList">
+      <% ingredients.forEach((ingredient, index) => { %>
+        <div class="form-group mt-3">
+          <input type="text" class="form-control mb-2 ingredient-name" name="ingredientName[]" placeholder="Ingredient name" value="<%= ingredient.name %>" required>
+          <input type="number" class="form-control mb-2 ingredient-quantity" name="ingredientQuantity[]" placeholder="Quantity" value="<%= ingredient.quantity %>" required>
+          <select class="form-control mb-2 ingredient-unit" name="ingredientUnit[]" required>
+            <option value="grams" <%= ingredient.unit === 'grams' ? 'selected' : '' %>>Grams</option>
+            <option value="ml" <%= ingredient.unit === 'ml' ? 'selected' : '' %>>Milliliters</option>
+            <option value="serving" <%= ingredient.unit === 'serving' ? 'selected' : '' %>>Serving</option>
+          </select>
+          <button type="button" class="btn btn-danger remove-ingredient-btn">Remove</button>
+        </div>
+      <% }) %>
+    </div>
+
+    <button type="button" id="addIngredientBtn" class="btn btn-secondary mt-2">Add Ingredient</button>
+    
+    <button type="submit" class="btn btn-primary mt-4">Save Changes</button>
+  </form>
+</div>
+
+<%- include('partials/footer') %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const ingredientList = document.getElementById('ingredientList');
+    const addIngredientBtn = document.getElementById('addIngredientBtn');
+
+    // Add existing ingredients to the form
+    ingredientList.querySelectorAll('.remove-ingredient-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const ingredientDiv = btn.closest('.form-group');
+        ingredientList.removeChild(ingredientDiv);
+      });
+    });
+
+    // Event listener for adding new ingredients
+    addIngredientBtn.addEventListener('click', () => {
+      const ingredientDiv = document.createElement('div');
+      ingredientDiv.className = 'form-group mt-3';
+      ingredientDiv.innerHTML = `
+        <input type="text" class="form-control mb-2" name="ingredientName[]" placeholder="Ingredient name" required>
+        <input type="number" class="form-control mb-2" name="ingredientQuantity[]" placeholder="Quantity" required>
+        <select class="form-control mb-2" name="ingredientUnit[]" required>
+          <option value="grams">Grams</option>
+          <option value="ml">Milliliters</option>
+          <option value="serving">Serving</option>
+        </select>
+        <button type="button" class="btn btn-danger remove-ingredient-btn">Remove</button>
+      `;
+
+      // Append the new ingredient div to the ingredient list
+      ingredientList.appendChild(ingredientDiv);
+
+      // Add event listener to the remove button
+      const removeBtn = ingredientDiv.querySelector('.remove-ingredient-btn');
+      removeBtn.addEventListener('click', () => {
+        ingredientList.removeChild(ingredientDiv);
+      });
+    });
+
+    // Submit the form
+    document.getElementById('edit-recipe-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const ingredients = [];
+
+      // Loop through all ingredient input fields
+      document.querySelectorAll('.form-group.mt-3').forEach(group => {
+        ingredients.push({
+          name: group.querySelector('.ingredient-name').value,
+          quantity: group.querySelector('.ingredient-quantity').value,
+          unit: group.querySelector('.ingredient-unit').value,
+        });
+      });
+
+      // Send data to the server via AJAX (PUT request)
+      fetch(`/recipes/<%= recipe.id %>`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          recipeName: document.getElementById('recipeName').value,
+          ingredients: ingredients,
+        }),
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Recipe updated successfully!');
+          window.location.href = `/recipes/<%= recipe.id %>`;
+        } else {
+          alert('Error updating recipe.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating recipe.');
+      });
+    });
+  });
+</script>

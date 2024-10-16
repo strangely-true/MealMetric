@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+
+<div class="container mt-4">
+  <h2>Create New Recipe</h2>
+  <form id="newRecipeForm" action="/recipes" method="POST">
+    <div class="form-group">
+      <label for="recipeName">Recipe Name</label>
+      <input type="text" class="form-control" id="recipeName" name="recipeName" required>
+    </div>
+    <div id="ingredientList">
+      <!-- Ingredients form will be populated here -->
+    </div>
+    <button type="button" id="addIngredientBtn" class="btn btn-secondary mt-3">
+      Add Ingredient
+    </button>
+    <button type="submit" class="btn btn-primary mt-3">Create Recipe</button>
+  </form>
+</div>
+
+<%- include('partials/footer') %>
+
+<script src="/js/new_recipe.js"></script>
