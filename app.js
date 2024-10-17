@@ -272,22 +272,35 @@ app.get('/recipes/:id/edit', requireLogin, async (req, res) => {
 
 // PUT route to edit a recipe
 app.put('/recipes/:id', requireLogin, async (req, res) => {
-  const { recipeName, ingredients } = req.body;
+  const { recipeName, instructions, ingredientName, ingredientQuantity, ingredientUnit } = req.body;
   
   try {
-    // Validate the recipe name
+    // Validate the recipe name and instructions
     if (!recipeName) {
       return res.status(400).send('Recipe name is required.');
     }
 
-    // Update the recipe name
+    // Update the recipe name and instructions
     await pool.query(
-      'UPDATE recipes SET name = $1 WHERE id = $2 AND user_id = $3',
-      [recipeName, req.params.id, req.session.userId]
+      'UPDATE recipes SET name = $1, instructions = $2 WHERE id = $3 AND user_id = $4',
+      [recipeName, instructions, req.params.id, req.session.userId]
     );
 
+    // Validate that ingredients are provided
+    if (!ingredientName || !ingredientQuantity || !ingredientUnit || 
+        ingredientName.length === 0 || ingredientQuantity.length === 0 || ingredientUnit.length === 0) {
+      return res.status(400).send('Ingredients must be provided.');
+    }
+
+    // Create an array of ingredient objects
+    const ingredients = ingredientName.map((name, index) => ({
+      name: name,
+      quantity: ingredientQuantity[index],
+      unit: ingredientUnit[index],
+    }));
+
     // Accumulate total nutritional values
-    let totalCalories = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
+    let totalCalories = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0, totalCholesterol = 0, totalSodium = 0, totalFiber = 0, totalSugar = 0, totalPotassium = 0;
 
     // Delete existing ingredients for this recipe
     await pool.query('DELETE FROM ingredients WHERE recipe_id = $1', [req.params.id]);
@@ -309,18 +322,23 @@ app.put('/recipes/:id', requireLogin, async (req, res) => {
       totalProtein += nutritionData.protein;
       totalCarbs += nutritionData.carbs;
       totalFat += nutritionData.fat;
+      totalCholesterol += nutritionData.cholesterol;
+      totalSodium += nutritionData.sodium;
+      totalFiber += nutritionData.fiber;
+      totalSugar += nutritionData.sugar;
+      totalPotassium += nutritionData.potassium;
 
       // Insert each ingredient into the ingredients table
       await pool.query(
-        'INSERT INTO ingredients (recipe_id, name, quantity, unit, calories, protein, carbs, fat) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-        [req.params.id, name, quantity, unit, nutritionData.calories, nutritionData.protein, nutritionData.carbs, nutritionData.fat]
+        'INSERT INTO ingredients (recipe_id, name, quantity, unit, calories, protein, carbs, fat, cholesterol, sodium, fiber, sugar, potassium) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)',
+        [req.params.id, name, quantity, unit, nutritionData.calories, nutritionData.protein, nutritionData.carbs, nutritionData.fat, nutritionData.cholesterol, nutritionData.sodium, nutritionData.fiber, nutritionData.sugar, nutritionData.potassium]
       );
     }
 
     // Update the total nutritional values for the recipe
     await pool.query(
-      'UPDATE recipes SET total_calories = $1, total_protein = $2, total_carbs = $3, total_fat = $4 WHERE id = $5',
-      [totalCalories, totalProtein, totalCarbs, totalFat, req.params.id]
+      'UPDATE recipes SET total_calories = $1, total_protein = $2, total_carbs = $3, total_fat = $4, total_cholesterol = $5, total_sodium = $6, total_fiber = $7, total_sugar = $8, total_potassium = $9 WHERE id = $10',
+      [totalCalories, totalProtein, totalCarbs, totalFat, totalCholesterol, totalSodium, totalFiber, totalSugar, totalPotassium, req.params.id]
     );
 
     // Redirect to the updated recipe page

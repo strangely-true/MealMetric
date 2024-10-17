@@ -1,22 +1,86 @@
-<%- include('partials/header') %>
-
-<div class="container mt-4">
-  <h1>Welcome, <%= username %>!</h1>
-  <h2>Your Recipes</h2>
-  <button class="btn btn-primary" onclick="location.href='/new_recipe'">Add New Recipe</button>
-  
-  <div id="recipe-list" class="mt-4">
-    <% if (recipes.length > 0) { %>
-      <% recipes.forEach(recipe => { %>
-        <div class="recipe">
-          <h3><%= recipe.name %></h3>
-          <button class="btn btn-info" onclick="location.href='/recipes/<%= recipe.id %>'">View Recipe</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Recipes - MealMetric</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#4CAF50',
+                        'primary-dark': '#45a049',
+                        'secondary': '#8BC34A',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans bg-gradient-to-br from-green-50 to-green-100 min-h-screen flex flex-col">
+    <nav class="bg-primary shadow-md w-full z-10 transition-all duration-300">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="/index" class="text-2xl font-bold text-white hover:text-green-200 transition duration-300">
+                    <i class="fas fa-leaf mr-2"></i>MealMetric.
+                </a>
+                <button onclick="location.href='/logout'" class="bg-white text-primary hover:bg-green-100 font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-105">
+                    Logout
+                </button>
+            </div>
         </div>
-      <% }) %>
-    <% } else { %>
-      <p>No recipes found. Add a new recipe to get started!</p>
-    <% } %>
-  </div>
-</div>
+    </nav>
 
-<%- include('partials/footer') %>
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">Welcome, <%= username %>!</h1>
+        
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700">Your Recipes</h2>
+            <button onclick="location.href='/new_recipe'" class="bg-secondary hover:bg-secondary-dark text-white font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-105">
+                <i class="fas fa-plus mr-2"></i>Add New Recipe
+            </button>
+        </div>
+        
+        <div id="recipe-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <% if (recipes.length > 0) { %>
+                <% recipes.forEach(recipe => { %>
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden transition duration-300 transform hover:scale-105">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4"><%= recipe.name %></h3>
+                            <button onclick="location.href='/recipes/<%= recipe.id %>'" class="bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded transition duration-300">
+                                View Recipe
+                            </button>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="col-span-full text-center py-12">
+                    <p class="text-xl text-gray-600 mb-6">No recipes found. Add a new recipe to get started!</p>
+                    <button onclick="location.href='/new_recipe'" class="bg-secondary hover:bg-secondary-dark text-white font-bold py-3 px-6 rounded-full transition duration-300 transform hover:scale-105">
+                        <i class="fas fa-plus mr-2"></i>Create Your First Recipe
+                    </button>
+                </div>
+            <% } %>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm">Powered by Nutritionix API</p>
+            <p class="text-sm">&copy; 2024 MealMetric. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>
