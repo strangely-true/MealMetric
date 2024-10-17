@@ -60,6 +60,7 @@ async function fetchNutritionalData(name, quantity, unit) {
       }
     );
     const food = response.data.foods[0];
+    console.log(food);
     return {
       name: food.food_name,
       calories: food.nf_calories,
