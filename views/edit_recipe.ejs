@@ -1,114 +1,218 @@
-<%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Recipe - MealMetric</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#4CAF50',
+                        'primary-dark': '#45a049',
+                        'secondary': '#8BC34A',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .btn-pulse {
+            animation: pulse 2s onclick;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+            }
+        }
+        header {
+            background-color: #4CAF50;
+            padding: 1rem 0;
+        }
+        header a {
+            color: white;
+            font-weight: 600;
 
-<div class="container mt-4">
-  <h1>Edit Recipe</h1>
+            margin-right: 1rem;
+            transition: color 0.3s ease-in-out;
+        }
+        header a:hover {
+            color: #f1f1f1;
+        }
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        footer a {
+            color: white;
+            margin: 0 1rem;
+            font-weight: 500;
+            transition: color 0.3s ease-in-out;
+        }
+        footer a:hover {
+            color: #e0e0e0;
+        }
+        .recipe-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gradient-to-br from-green-50 to-green-100 min-h-screen flex flex-col justify-between">
 
-  <form id="edit-recipe-form">
-    <div class="form-group">
-      <label for="recipeName">Recipe Name</label>
-      <input type="text" class="form-control" id="recipeName" value="<%= recipe.name %>" required>
-    </div>
-
-    <h2>Ingredients</h2>
-    <div id="ingredientList">
-      <% ingredients.forEach((ingredient, index) => { %>
-        <div class="form-group mt-3">
-          <input type="text" class="form-control mb-2 ingredient-name" name="ingredientName[]" placeholder="Ingredient name" value="<%= ingredient.name %>" required>
-          <input type="number" class="form-control mb-2 ingredient-quantity" name="ingredientQuantity[]" placeholder="Quantity" value="<%= ingredient.quantity %>" required>
-          <select class="form-control mb-2 ingredient-unit" name="ingredientUnit[]" required>
-            <option value="grams" <%= ingredient.unit === 'grams' ? 'selected' : '' %>>Grams</option>
-            <option value="ml" <%= ingredient.unit === 'ml' ? 'selected' : '' %>>Milliliters</option>
-            <option value="serving" <%= ingredient.unit === 'serving' ? 'selected' : '' %>>Serving</option>
-          </select>
-          <button type="button" class="btn btn-danger remove-ingredient-btn">Remove</button>
+    <!-- Header -->
+    <header class="shadow-md">
+        <div class="container mx-auto flex justify-between items-center px-6">
+            <a href="/" class="text-2xl font-bold">MealMetric.</a>
+            <nav>
+                <a href="/index">Recipes</a>
+                <a href="/logout">Logout</a>
+            </nav>
         </div>
-      <% }) %>
+    </header>
+
+    <!-- Main Content -->
+    <div class="recipe-container py-12 px-4">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-8" data-aos="fade-down">Edit Recipe</h1>
+
+        <form id="edit-recipe-form" class="bg-white shadow-lg rounded-lg p-8" data-aos="fade-up">
+            <div class="mb-6">
+                <label for="recipeName" class="block text-gray-700 text-sm font-bold mb-2">Recipe Name</label>
+                <input type="text" class="form-control shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" id="recipeName" value="<%= recipe.name %>" required>
+            </div>
+
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Ingredients</h2>
+            <div id="ingredientList" class="space-y-4">
+                <% ingredients.forEach((ingredient, index) => { %>
+                    <div class="form-group bg-green-50 p-4 rounded-lg shadow-md">
+                        <input type="text" class="form-control mb-2 ingredient-name py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400" name="ingredientName[]" placeholder="Ingredient name" value="<%= ingredient.name %>" required>
+                        <input type="number" class="form-control mb-2 ingredient-quantity py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400" name="ingredientQuantity[]" placeholder="Quantity" value="<%= ingredient.quantity %>" required>
+                        <select class="form-control mb-2 ingredient-unit py-2 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400" name="ingredientUnit[]" required>
+                            <option value="grams" <%= ingredient.unit === 'grams' ? 'selected' : '' %>>Grams</option>
+                            <option value="ml" <%= ingredient.unit === 'ml' ? 'selected' : '' %>>Milliliters</option>
+                            <option value="serving" <%= ingredient.unit === 'serving' ? 'selected' : '' %>>Serving</option>
+                        </select>
+                        <button type="button" class="btn btn-danger remove-ingredient-btn bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">Remove</button>
+                    </div>
+                <% }) %>
+            </div>
+
+            <button type="button" id="addIngredientBtn" class="btn btn-secondary mt-4 bg-orange-400 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">+</button>
+            
+            <button type="submit" id="edit-recipe-form" class="btn btn-secondary mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">Save Changes</button>
+        </form>
     </div>
 
-    <button type="button" id="addIngredientBtn" class="btn btn-secondary mt-2">Add Ingredient</button>
+    <!-- Footer -->
+    <footer class="shadow-md">
+        <div class="container mx-auto px-6">
+            <p>&copy; 2024 MealMetric. All rights reserved.</p>
+            <p> Powered by nutritionix api.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+      AOS.init({
+            duration: 0,
+            once: true,
+        });
+      document.addEventListener('DOMContentLoaded', () => {
+        const ingredientList = document.getElementById('ingredientList');
+        const addIngredientBtn = document.getElementById('addIngredientBtn');
     
-    <button type="submit" class="btn btn-primary mt-4">Save Changes</button>
-  </form>
-</div>
-
-<%- include('partials/footer') %>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const ingredientList = document.getElementById('ingredientList');
-    const addIngredientBtn = document.getElementById('addIngredientBtn');
-
-    // Add existing ingredients to the form
-    ingredientList.querySelectorAll('.remove-ingredient-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const ingredientDiv = btn.closest('.form-group');
-        ingredientList.removeChild(ingredientDiv);
-      });
-    });
-
-    // Event listener for adding new ingredients
-    addIngredientBtn.addEventListener('click', () => {
-      const ingredientDiv = document.createElement('div');
-      ingredientDiv.className = 'form-group mt-3';
-      ingredientDiv.innerHTML = `
-        <input type="text" class="form-control mb-2" name="ingredientName[]" placeholder="Ingredient name" required>
-        <input type="number" class="form-control mb-2" name="ingredientQuantity[]" placeholder="Quantity" required>
-        <select class="form-control mb-2" name="ingredientUnit[]" required>
-          <option value="grams">Grams</option>
-          <option value="ml">Milliliters</option>
-          <option value="serving">Serving</option>
-        </select>
-        <button type="button" class="btn btn-danger remove-ingredient-btn">Remove</button>
-      `;
-
-      // Append the new ingredient div to the ingredient list
-      ingredientList.appendChild(ingredientDiv);
-
-      // Add event listener to the remove button
-      const removeBtn = ingredientDiv.querySelector('.remove-ingredient-btn');
-      removeBtn.addEventListener('click', () => {
-        ingredientList.removeChild(ingredientDiv);
-      });
-    });
-
-    // Submit the form
-    document.getElementById('edit-recipe-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      const ingredients = [];
-
-      // Loop through all ingredient input fields
-      document.querySelectorAll('.form-group.mt-3').forEach(group => {
-        ingredients.push({
-          name: group.querySelector('.ingredient-name').value,
-          quantity: group.querySelector('.ingredient-quantity').value,
-          unit: group.querySelector('.ingredient-unit').value,
+        // Add existing ingredients to the form
+        ingredientList.querySelectorAll('.remove-ingredient-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const ingredientDiv = btn.closest('.form-group');
+            ingredientList.removeChild(ingredientDiv);
+          });
+        });
+    
+        // Event listener for adding new ingredients
+        addIngredientBtn.addEventListener('click', () => {
+          const ingredientDiv = document.createElement('div');
+          ingredientDiv.className = 'form-group mt-3';
+          ingredientDiv.innerHTML = `
+            <input type="text" class="form-control mb-2" name="ingredientName[]" placeholder="Ingredient name" required>
+            <input type="number" class="form-control mb-2" name="ingredientQuantity[]" placeholder="Quantity" required>
+            <select class="form-control mb-2" name="ingredientUnit[]" required>
+              <option value="grams">Grams</option>
+              <option value="ml">Milliliters</option>
+              <option value="serving">Serving</option>
+            </select>
+            <button type="button" class="btn btn-danger remove-ingredient-btn">Remove</button>
+          `;
+    
+          // Append the new ingredient div to the ingredient list
+          ingredientList.appendChild(ingredientDiv);
+    
+          // Add event listener to the remove button
+          const removeBtn = ingredientDiv.querySelector('.remove-ingredient-btn');
+          removeBtn.addEventListener('click', () => {
+            ingredientList.removeChild(ingredientDiv);
+          });
+        });
+    
+        // Submit the form
+        document.getElementById('edit-recipe-form').addEventListener('submit', function(event) {
+          event.preventDefault();
+    
+          const ingredients = [];
+    
+          // Loop through all ingredient input fields
+          document.querySelectorAll('.form-group.mt-3').forEach(group => {
+            ingredients.push({
+              name: group.querySelector('.ingredient-name').value,
+              quantity: group.querySelector('.ingredient-quantity').value,
+              unit: group.querySelector('.ingredient-unit').value,
+            });
+          });
+    
+          // Send data to the server via AJAX (PUT request)
+          fetch(`/recipes/<%= recipe.id %>`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              recipeName: document.getElementById('recipeName').value,
+              ingredients: ingredients,
+            }),
+          })
+          .then(response => {
+            if (response.ok) {
+              alert('Recipe updated successfully!');
+              window.location.href = `/recipes/<%= recipe.id %>`;
+            } else {
+              alert('Error updating recipe.');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating recipe.');
+          });
         });
       });
-
-      // Send data to the server via AJAX (PUT request)
-      fetch(`/recipes/<%= recipe.id %>`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          recipeName: document.getElementById('recipeName').value,
-          ingredients: ingredients,
-        }),
-      })
-      .then(response => {
-        if (response.ok) {
-          alert('Recipe updated successfully!');
-          window.location.href = `/recipes/<%= recipe.id %>`;
-        } else {
-          alert('Error updating recipe.');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Error updating recipe.');
-      });
-    });
-  });
-</script>
+    </script>
+    
+</body>
+</html>

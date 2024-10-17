@@ -2,7 +2,8 @@
 
 <div class="container mt-4">
   <h1><%= recipe.name %></h1>
-  
+  <h2>Instructions</h2>
+  <p><%= recipe.instructions %></p>
   <h2>Ingredients</h2>
   <ul>
     <% ingredients.forEach(ingredient => { %>
@@ -12,10 +13,10 @@
   
   <h2>Nutritional Information</h2>
   <ul>
-    <li>Calories: <%= recipe.total_calories *10 %>cal</li>
-    <li>Protein: <%= recipe.total_protein *10 %>g</li>
-    <li>Carbohydrates: <%= recipe.total_carbs *10 %>g</li>
-    <li>Fat: <%= recipe.total_fat *10 %>g</li>
+    <li>Calories: <%= recipe.total_calories  %>cal</li>
+    <li>Protein: <%= recipe.total_protein  %>g</li>
+    <li>Carbohydrates: <%= recipe.total_carbs %>g</li>
+    <li>Fat: <%= recipe.total_fat  %>g</li>
   </ul>
 
   <div class="mt-4">

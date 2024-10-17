@@ -42,13 +42,12 @@ function requireLogin(req, res, next) {
 }
 
 // Fetch nutritional data from Nutritionix API
-async function fetchNutritionalData(query, servings) {
+async function fetchNutritionalData(name, quantity, unit) {
   try {
     const response = await axios.post(
       'https://trackapi.nutritionix.com/v2/natural/nutrients',
       {
-        query: query,
-        num_servings: servings,
+        query: quantity +' '+ unit+ ' ' + name,
       },
       
       {
@@ -60,7 +59,6 @@ async function fetchNutritionalData(query, servings) {
         },
       }
     );
-    
     const food = response.data.foods[0];
     return {
       name: food.food_name,
@@ -68,6 +66,12 @@ async function fetchNutritionalData(query, servings) {
       protein: food.nf_protein,
       carbs: food.nf_total_carbohydrate,
       fat: food.nf_total_fat,
+      cholesterol: food.nf_cholesterol,
+      sodium: food.nf_sodium,
+      fiber: food.nf_dietary_fiber,
+      sugar: food.nf_sugars,
+      potassium: food.nf_potassium,
+      photo: food.photo.thumb,
     };
   } catch (error) {
     console.error('Error fetching nutritional data:', error);
@@ -164,7 +168,7 @@ app.get('/new_recipe', requireLogin, (req, res) => {
 });
 
 app.post('/recipes', requireLogin, async (req, res) => {
-  const { recipeName, ingredientName, ingredientQuantity, ingredientUnit } = req.body; // Destructure the correct properties
+  const { recipeName,instructions, ingredientName, ingredientQuantity, ingredientUnit } = req.body; // Destructure the correct properties
 
   try {
     // Validate that ingredients are provided
@@ -182,14 +186,14 @@ app.post('/recipes', requireLogin, async (req, res) => {
 
     // Insert the recipe into the database
     const newRecipe = await pool.query(
-      'INSERT INTO recipes (name, user_id) VALUES ($1, $2) RETURNING id',
-      [recipeName, req.session.userId]
+      'INSERT INTO recipes (name, user_id,instructions) VALUES ($1, $2,$3) RETURNING id',
+      [recipeName, req.session.userId, instructions]
     );
 
     const recipeId = newRecipe.rows[0].id;
 
     // For each ingredient, fetch nutritional data and store it
-    let totalCalories = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
+    let totalCalories = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0, totalCholesterol = 0, totalSodium = 0, totalFiber = 0, totalSugar = 0, totalPotassium = 0;
 
     for (let ingredient of ingredients) {
       const { name, quantity, unit } = ingredient;
@@ -199,24 +203,29 @@ app.post('/recipes', requireLogin, async (req, res) => {
         return res.status(400).send('Each ingredient must have a name, quantity, and unit.');
       }
 
-      const nutritionData = await fetchNutritionalData(name, quantity);
+      const nutritionData = await fetchNutritionalData(name, quantity, unit);
 
       // Accumulate total nutritional values
       totalCalories += nutritionData.calories;
       totalProtein += nutritionData.protein;
       totalCarbs += nutritionData.carbs;
       totalFat += nutritionData.fat;
+      totalCholesterol += nutritionData.cholesterol;
+      totalSodium += nutritionData.sodium;
+      totalFiber += nutritionData.fiber;
+      totalSugar += nutritionData.sugar;
+      totalPotassium += nutritionData.potassium;
 
       // Insert ingredient into the database
       await pool.query(
-        'INSERT INTO ingredients (recipe_id, name, quantity, unit, calories, protein, carbs, fat) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-        [recipeId, name, quantity, unit, nutritionData.calories, nutritionData.protein, nutritionData.carbs, nutritionData.fat]
+        'INSERT INTO ingredients (recipe_id, name, quantity, unit, calories, protein, carbs, fat, cholesterol, sodium, fiber,sugar, potassium) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)',
+        [recipeId, name, quantity, unit, nutritionData.calories, nutritionData.protein, nutritionData.carbs, nutritionData.fat, nutritionData.cholesterol, nutritionData.sodium, nutritionData.fiber, nutritionData.sugar, nutritionData.potassium]
       );
     }
     // Update the total nutrition values for the recipe
     await pool.query(
-      'UPDATE recipes SET total_calories = $1, total_protein = $2, total_carbs = $3, total_fat = $4 WHERE id = $5',
-      [totalCalories, totalProtein, totalCarbs, totalFat, recipeId]
+      'UPDATE recipes SET total_calories = $1, total_protein = $2, total_carbs = $3, total_fat = $4,total_cholesterol = $5,total_sodium = $6,total_fiber = $7,total_sugar = $8,total_potassium = $9 WHERE id = $10',
+      [totalCalories, totalProtein, totalCarbs, totalFat,totalCholesterol,totalSodium,totalFiber,totalSugar,totalPotassium, recipeId]
     );
     
 
@@ -292,7 +301,7 @@ app.put('/recipes/:id', requireLogin, async (req, res) => {
       }
 
       // Fetch the nutritional data for the ingredient
-      const nutritionData = await fetchNutritionalData(name, quantity);
+      const nutritionData = await fetchNutritionalData(name, quantity, unit);
 
       // Accumulate nutritional values for the entire recipe
       totalCalories += nutritionData.calories;
