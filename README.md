@@ -1,6 +1,6 @@
 # MealMetric
 
-#### Video Demo: [Add Your Video URL Here]
+#### Video Demo: [link](https://www.youtube.com/watch?v=0nOlmNm4FMw)
 
 ## Description
 
