@@ -1,7 +1,5 @@
 # MealMetric
 
-#### Video Demo: [link](https://www.youtube.com/watch?v=0nOlmNm4FMw)
-
 ## Description
 
 MealMetric is a comprehensive web application designed to serve as an intuitive and powerful nutrition calculator. It allows users to create, manage, and analyze recipes while tracking detailed nutritional information of ingredients. This tool is perfect for anyone looking to monitor their dietary intake and gain insights into the nutritional value of their meals.
